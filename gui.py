@@ -55,6 +55,10 @@ class Application(tk.Frame):
             title="Open Text file", 
             filetypes=(("Text Files", "*.txt"),)
             )
+        with open(tf, 'r') as file:
+            data = file.read()
+        self.field.insert(1.0,data)
+        
 
 root = tk.Tk()
 root.title('Not a Fact Checker')
