@@ -14,4 +14,5 @@ pytorch
 gdown
 tkinter
 pickle
+sklearn
 ```

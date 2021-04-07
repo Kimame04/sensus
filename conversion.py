@@ -268,5 +268,5 @@ def convert(textArr, objective_truth):
 
 if __name__ == "__main__":
 
-    print(convert([input("Enter text: ")],False))
+    print(convert([input("Enter text: ")],True))
     print("done")
