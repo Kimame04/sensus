@@ -4,6 +4,10 @@ from tkinter import filedialog
 import tkinter as tk 
 import pickle
 import numpy as np
+from nltk.corpus import stopwords
+from nltk.corpus import words
+from nltk.corpus import wordnet
+import re
 
 class Application(tk.Frame):
     global model_direct
@@ -21,16 +25,19 @@ class Application(tk.Frame):
         
         self.field = tk.Text(self)
         self.field.grid(row=2,column=0,padx=10,pady=5)
+               
+        self.upload = tk.Button(self, text = 'Upload .txt File', width = 60, command = self.uploadTxt)
+        self.upload.grid(row=3,column=0,padx=10,pady=3)
         
         self.btn = tk.Button(self, text='Detect Objectivity', command = self.detectObjectivity)
-        self.btn.grid(row=3,column=0,padx=40,pady=3,sticky=W)
+        self.btn.grid(row=4,column=0,padx=50,pady=3,sticky=W)
+        
+        self.btn2 = tk.Button(self, text='Make More Objective', command = self.makeMoreObjective)
+        self.btn2.grid(row=4,column=0,padx=40,pady=3)
+        
+        self.btn3 = tk.Button(self, text='Make More Subjective', command = self.makeMoreSubjective)
+        self.btn3.grid(row=4,column=0,padx=50,pady=3,sticky=E)
 
-        self.btn2 = tk.Button(self, text='Change Text Voice', command = self.generateConverted)
-        self.btn2.grid(row=3,column=0,padx=40,pady=3,sticky=E)
-        
-        self.upload = tk.Button(self, text = 'Upload .txt File', command = self.uploadTxt)
-        self.upload.grid(row=4,column=0,padx=10,pady=3)
-        
         self.res = tk.Label(self, text='', font=('Roboto',13))
         self.res.grid(row=5,column=0,padx=10,pady=10)  
         
@@ -48,16 +55,49 @@ class Application(tk.Frame):
             data = file.read()
         self.field.insert(1.0,data)
     
-    def generateConverted(self):
-        result = model_direct.predict([self.field.get(1.0,'end')])
-        if result[0] == 0:
-            voice = 'subjective'
-            transformed = 'objective'
-        else: 
-            voice = 'objective'
-            transformed = 'subjective'
-        self.res.config(text = 'Your text is detected to be ' + voice + '. We will therefore transform it to be more '
-                        + transformed + '.')
+    def makeMoreSubjective(self):
+        text = self.test(self.field.get(1.0,'end'),True)
+        file = open('subjectified.txt','w')
+        file.write(text)
+        file.close()
+        self.res.config(text = 'Text converted to be more subjective.\nPlease check your file system.')
+        
+    def makeMoreObjective(self):
+        text = self.test(self.field.get(1.0,'end'),False)
+        file = open('objectified.txt','w')
+        file.write(text)
+        file.close()
+        self.res.config(text = 'Text converted to be more objective.\nPlease check your file system.')
+        
+    def test(self,string,isSubjective):
+        strings = string.split(' ')
+        stop_words = set(stopwords.words('english')) 
+        res = ''
+        for string in strings: 
+            if string in stop_words or not string.islower(): 
+                temp = ' ' + string + ' '
+                res+=temp
+                continue
+            if len(wordnet.synsets(string)) != 0:
+                temp = ' ' + self.find_synonyms(string,isSubjective)[0][1] + ' '
+            else: temp = string + ' '
+            res += temp 
+        regex = re.compile(r"\s+")
+        res = regex.sub(" ", res).strip()
+        return res
+    
+    def find_synonyms(self,word,isSubjective):
+        list_synonyms = []
+        for syn in wordnet.synsets(word):
+            for lemm in syn.lemmas():
+                list_synonyms.append(lemm.name())
+        #list_synonyms = [item.lower() for item in list_synonyms]
+        scores = [(model_direct.predict_proba([text])[0][0],text) for text in list_synonyms]
+        scores.append((model_direct.predict_proba([word])[0][0],word))
+        if isSubjective:
+            scores.sort(reverse=True)
+        else: scores.sort()
+        return scores
         
         
 
