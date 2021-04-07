@@ -73,7 +73,7 @@ def convert(textArr):
     model = CtrlGenModel(config, vocab_size, len(textArr), weights_matrix)
     #model = model.cuda()
     if exists("./checkpoint/checkpoint.model"):
-        model.load_state_dict(torch.load("./checkpoint/checkpoint.model"))
+        model.load_state_dict(torch.load("./checkpoint/checkpoint.model",map_location=torch.device('cpu')))
     else:
         gdown.download("https://drive.google.com/file/d/1gW6taIS1LQJ71qW0y1tlZkgi55EIvNDi/view?usp=sharing",
                        './checkpoint/checkpoint.model', quiet=False)
