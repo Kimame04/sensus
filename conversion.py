@@ -3,7 +3,7 @@ from os.path import exists
 import gdown as gdown
 import torch
 import torchtext.vocab as torch_vocab
-import wget as wget
+import numpy as np
 
 from conversion_config import Config
 from model import CtrlGenModel
@@ -44,7 +44,7 @@ def convert(textArr):
     config = Config()
 
     gpu = -1
-    datapath = "./data/subj_dataset/"
+    datapath = "./subj_dataset/"
     if torch.cuda.is_available() and gpu == -1:
         gpu = 0
     if gpu != -1:
