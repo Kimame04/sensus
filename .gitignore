@@ -1,1 +1,6 @@
 *.DS_Store
+/subj_dataset/dev_data.pkl
+/subj_dataset/train_data.pkl
+/subj_dataset/train.merge
+/checkpoint/
+/cached-GloVe/
