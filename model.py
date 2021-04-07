@@ -82,7 +82,7 @@ class CtrlGenModel(nn.Module):
         #get the regular decoder result each time using the target input as inupt to calculate the loss_ae
         decoder_hidden = self.connector(h).unsqueeze(0)
         decoder_outputs = torch.Tensor(sentence_length,input_length,self.vocab_size)
-        for di in range(sentence_length):
+        for di in range(len(inputs["text_ids"])):
             decoder_output,decoder_hidden = self.decoder(embedding = self.embedder,word_input = inputs["text_ids"][:,di], initial_state = decoder_hidden ,encoder_outputs= enc_outputs)
             #print("decoder_output: ",decoder_output.shape)
             decoder_outputs[di] = decoder_output

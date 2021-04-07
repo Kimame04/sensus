@@ -70,14 +70,18 @@ class Application(tk.Frame):
         show_method(title, message)
     
     def makeMoreSubjective(self):
-        text = self.test(self.field.get(1.0,'end'),True)
+        # text = self.test(self.field.get(1.0,'end'),True)
+        t=self.field.get(1.0,'end')
+        text=convert(t.split("\n"),False)
         file = open('subjectified.txt','w')
         file.write(text)
         file.close()
         self.res.config(text = 'Text converted to be more subjective.\nPlease check your file system.')
-        
+
     def makeMoreObjective(self):
-        text = self.test(self.field.get(1.0,'end'),False)
+        # text = self.test(self.field.get(1.0,'end'),False)
+        t=self.field.get(1.0,'end')
+        text=convert(t.split("\n"),True)
         file = open('objectified.txt','w')
         file.write(text)
         file.close()
