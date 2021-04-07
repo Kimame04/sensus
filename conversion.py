@@ -36,7 +36,7 @@ def make_pretrain_embeddings(glove, id_to_word, emb_dim):
         except KeyError:
             weights_matrix.append(np.random.normal(scale=0.6, size=(emb_dim,)))
 
-    new_weight = torch.FloatTensor(weights_matrix).cuda()
+    new_weight = torch.FloatTensor(weights_matrix)
     return new_weight
 
 
@@ -45,11 +45,11 @@ def convert(textArr):
 
     gpu = -1
     datapath = "./subj_dataset/"
-    if torch.cuda.is_available() and gpu == -1:
+    '''if torch.cuda.is_available() and gpu == -1:
         gpu = 0
     if gpu != -1:
         torch.cuda.set_device(gpu)
-        print("Using GPU: " + str(gpu))
+        print("Using GPU: " + str(gpu))'''
 
     # TODO: lock UI here
     dic_glove = torch_vocab.GloVe(name='twitter.27B', dim=100, cache="./cached-GloVe/27B.glove")
@@ -62,7 +62,7 @@ def convert(textArr):
     # Make the weight matrix which will be used as pretrained embedding.
     weights_matrix = make_pretrain_embeddings(dic_glove, id_to_word, config.model['embedder']['dim'])
 
-    glove = torch_vocab.GloVe(name='840B', dim=300)
+    glove = torch_vocab.GloVe(name='840B', dim=300, cache="./cached-GloVe/840B.glove")
 
     #train_nn_file = datapath + "train_nn.npy"
     #dev_nn_file = datapath + "dev_nn.npy"
@@ -71,7 +71,7 @@ def convert(textArr):
     max_length_dev = 1000
 
     model = CtrlGenModel(config, vocab_size, len(textArr), weights_matrix)
-    model = model.cuda()
+    #model = model.cuda()
     if exists("./checkpoint/checkpoint.model"):
         model.load_state_dict(torch.load("./checkpoint/checkpoint.model"))
     else:

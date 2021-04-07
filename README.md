@@ -10,15 +10,8 @@ requirements:
 
 ```
 numpy
-pytorch with CUDA support
+pytorch
 gdown
 tkinter
 pickle
-```
-
-if you get `AssertionError: Torch not compiled with CUDA enabled`, try this:
-```
-pip uninstall torch
-pip cache purge
-pip install torch -f https://download.pytorch.org/whl/torch_stable.html
 ```
