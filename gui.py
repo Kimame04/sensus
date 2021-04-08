@@ -4,9 +4,6 @@ from tkinter import filedialog
 import tkinter as tk 
 import pickle
 import numpy as np
-from nltk.corpus import stopwords
-from nltk.corpus import words
-from nltk.corpus import wordnet
 import re
 from conversion import convert
 import cleanString
@@ -81,42 +78,9 @@ class Application(tk.Frame):
         file.close()
         self.res.config(text = 'Text converted to be more objective.\nPlease check your file system.')
         
-    def test(self,string,isSubjective):
-        strings = string.split(' ')
-        stop_words = set(stopwords.words('english')) 
-        res = ''
-        for string in strings: 
-            if string in stop_words or not string.islower(): 
-                temp = ' ' + string + ' '
-                res+=temp
-                continue
-            if len(wordnet.synsets(string)) != 0:
-                temp = ' ' + self.find_synonyms(string,isSubjective)[0][1] + ' '
-            else: temp = string + ' '
-            res += temp 
-        regex = re.compile(r"\s+")
-        res = regex.sub(" ", res).strip()
-        return res
-    
-    def find_synonyms(self,word,isSubjective):
-        list_synonyms = []
-        for syn in wordnet.synsets(word):
-            for lemm in syn.lemmas():
-                list_synonyms.append(lemm.name())
-        #list_synonyms = [item.lower() for item in list_synonyms]
-        scores = [(model_direct.predict_proba([text])[0][0],text) for text in list_synonyms]
-        scores.append((model_direct.predict_proba([word])[0][0],word))
-        if isSubjective:
-            scores.sort(reverse=True)
-        else: scores.sort()
-        return scores
-        
-        
 
 root = tk.Tk()
 root.title('Not a Fact Checker')
         
 app = Application(master=root)
-#app['bg'] = '#545AA7'
-
 root.mainloop()
