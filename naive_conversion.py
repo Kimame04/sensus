@@ -1,8 +1,12 @@
+import pickle
+import re
+import nltk
 from nltk.corpus import stopwords
-from nltk.corpus import words
 from nltk.corpus import wordnet
 
-def test(self,string,isSubjective):
+def test(string,isSubjective):
+    nltk.download('stopwords')
+    nltk.download('wordnet')
     strings = string.split(' ')
     stop_words = set(stopwords.words('english')) 
     res = ''
@@ -12,14 +16,15 @@ def test(self,string,isSubjective):
             res+=temp
             continue
         if len(wordnet.synsets(string)) != 0:
-            temp = ' ' + self.find_synonyms(string,isSubjective)[0][1] + ' '
+            temp = ' ' + find_synonyms(string,isSubjective)[0][1] + ' '
         else: temp = string + ' '
         res += temp 
     regex = re.compile(r"\s+")
     res = regex.sub(" ", res).strip()
     return res
 
-def find_synonyms(self,word,isSubjective):
+def find_synonyms(word,isSubjective):
+    model_direct = pickle.load(open('objectivity-detection-direct.sav','rb'))
     list_synonyms = []
     for syn in wordnet.synsets(word):
         for lemm in syn.lemmas():

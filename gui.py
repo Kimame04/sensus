@@ -1,17 +1,16 @@
-from tkinter import *
-from tkinter import ttk
-from tkinter import filedialog
-import tkinter as tk 
 import pickle
-import numpy as np
-import re
-from conversion import convert
+import tkinter as tk
+from tkinter import *
+from tkinter import filedialog
 import cleanString
+import naive_conversion
+from conversion import convert
+
 
 class Application(tk.Frame):
     global model_direct
     model_direct = pickle.load(open('objectivity-detection-direct.sav','rb'))
-    
+
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
@@ -31,10 +30,10 @@ class Application(tk.Frame):
         self.btn = tk.Button(self, text='Detect Objectivity', command = self.detectObjectivity)
         self.btn.grid(row=4,column=0,padx=50,pady=3,sticky=W)
         
-        self.btn2 = tk.Button(self, text='Make More Objective', command = self.makeMoreObjective)
+        self.btn2 = tk.Button(self, text='Make More Objective', command = self.naive_obj)
         self.btn2.grid(row=4,column=0,padx=40,pady=3)
         
-        self.btn3 = tk.Button(self, text='Make More Subjective', command = self.makeMoreSubjective)
+        self.btn3 = tk.Button(self, text='Make More Subjective', command = self.naive_subj)
         self.btn3.grid(row=4,column=0,padx=50,pady=3,sticky=E)
 
         self.res = tk.Label(self, text='', font=('Roboto',13))
@@ -78,9 +77,22 @@ class Application(tk.Frame):
         file.close()
         self.res.config(text = 'Text converted to be more objective.\nPlease check your file system.')
         
-
-root = tk.Tk()
-root.title('Not a Fact Checker')
+    def naive_obj(self):
+        self.naive_convert(False)
+    
+    def naive_subj(self):
+        self.naive_convert(True)
         
-app = Application(master=root)
-root.mainloop()
+    def naive_convert(self,voice):
+        temp = naive_conversion.test(self.field.get(1.0,'end'),voice)
+        self.res.config(text = 'Text converted.\nPlease check your file system.')
+        file = open('converted.txt','w')
+        file.write(temp)
+        file.close()
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    root.title('Not a Fact Checker')
+
+    app = Application(master=root)
+    root.mainloop()

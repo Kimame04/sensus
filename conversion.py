@@ -10,8 +10,6 @@ from model import CtrlGenModel
 
 from nltk import pos_tag, word_tokenize
 
-
-
 def makeVocab(filename):
     word_to_id = {}
     id_to_word = {}
