@@ -6,7 +6,6 @@ import cleanString
 import naive_conversion
 from conversion import convert
 
-
 class Application(tk.Frame):
     global model_direct
     model_direct = pickle.load(open('objectivity-detection-direct.sav','rb'))
@@ -93,6 +92,5 @@ class Application(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.title('Not a Fact Checker')
-
     app = Application(master=root)
     root.mainloop()
