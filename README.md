@@ -21,7 +21,7 @@ pickle
 sklearn
 ```
 ## Running the app
-Run the following command inside the directory path:
+Run the following command inside the src directory:
 ```
 python3 gui.py
 ```
