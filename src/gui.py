@@ -29,10 +29,10 @@ class Application(tk.Frame):
         self.btn = tk.Button(self, text='Detect Objectivity', command = self.detectObjectivity)
         self.btn.grid(row=4,column=0,padx=50,pady=3,sticky=W)
         
-        self.btn2 = tk.Button(self, text='Make More Objective', command = self.naive_obj)
+        self.btn2 = tk.Button(self, text='Objectify (Naïve)', command = self.naive_obj)
         self.btn2.grid(row=4,column=0,padx=40,pady=3)
         
-        self.btn3 = tk.Button(self, text='Make More Subjective', command = self.naive_subj)
+        self.btn3 = tk.Button(self, text='Subjectify (Naïve)', command = self.naive_subj)
         self.btn3.grid(row=4,column=0,padx=50,pady=3,sticky=E)
 
         self.res = tk.Label(self, text='', font=('Roboto',13))
@@ -84,7 +84,7 @@ class Application(tk.Frame):
         
     def naive_convert(self,voice):
         temp = naive_conversion.test(self.field.get(1.0,'end'),voice)
-        self.res.config(text = 'Text converted.\nPlease check your file system.')
+        self.res.config(text = 'Text converted.\nPlease check your file system for saved file \'converted.txt\'')
         file = open('converted.txt','w')
         file.write(temp)
         file.close()
