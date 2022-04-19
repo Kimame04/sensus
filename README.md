@@ -1,6 +1,6 @@
 # sensus
 
-A machine learning project that concerns text objectivity. It aims to, firstly, detect text objectivity, and then secondly, subjectify text and objectify them.
+A machine learning project that concerns text sentiment and objectivity. It aims to, firstly, detect text objectivity, and then secondly, subjectify text and objectify them.
 
 Google Colab link: https://colab.research.google.com/drive/1A9peY0Neqh93G6lFx6q8hleSNww-4bL9?usp=sharing
 
